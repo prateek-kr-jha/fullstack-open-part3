@@ -1,0 +1,91 @@
+const express = require('express');
+const app = express();
+
+let persons = [
+    { 
+      "id": "1",
+      "name": "Arto Hellas", 
+      "number": "040-123456"
+    },
+    { 
+      "id": "2",
+      "name": "Ada Lovelace", 
+      "number": "39-44-5323523"
+    },
+    { 
+      "id": "3",
+      "name": "Dan Abramov", 
+      "number": "12-43-234345"
+    },
+    { 
+      "id": "4",
+      "name": "Mary Poppendieck", 
+      "number": "39-23-6423122"
+    }
+]
+
+app.use(express.json());
+
+app.get('/api/persons', (req, resp) => {
+    resp.status(200).send(persons);
+})
+
+app.get('/info', (req, res) => {
+    const dateString = new Date(Date.now());
+    const infoHtmlString = `<p><em>Phonebook has info for ${persons.length} people</em></p>
+    <p><em>${dateString}</em></p>`;
+
+    res.status(200).send(infoHtmlString);
+})
+
+
+app.get('/api/persons/:id', (req, res) => {
+    const id = req.params.id;
+    console.log(id, "------");
+    const person = persons.find(person => person.id === id);
+
+    if(person) {
+        return res.status(200).send(person);
+    } else {
+        res.statusMessage = "person with this id doesn't exist";
+        return res.status(404).end();
+    }
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+    const id = req.params.id;
+    console.log(id, "------");
+    persons = persons.filter(person => person.id === id);
+
+    return res.status(204).end();
+})
+
+const generateId = () => {
+    return parseInt(Math.random() * 100000)
+}
+
+app.post('/api/persons/', (req, res) => {
+    const body = req.body;
+
+    if(!body || !body.name || !body.number) {
+        return res.status(400).json({
+            error: "name or number missing"
+        })
+    }
+
+    const newPerson = {
+        name: body.name,
+        number: body.number,
+        id: generateId()
+    }
+    persons = persons.concat(newPerson);
+
+    return res.status(200).json(newPerson);
+})
+
+
+const PORT = 3002;
+
+app.listen(PORT, () => {
+    console.log('App listening on ' + PORT);
+})
