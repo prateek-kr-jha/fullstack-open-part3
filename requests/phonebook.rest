@@ -1,16 +1,16 @@
-GET http://localhost:3002/info
+GET https://fullstack-open-part3-restless-dust-811.fly.dev/info
 
 ###
-GET http://localhost:3002/api/persons
+GET https://fullstack-open-part3-restless-dust-811.fly.dev/api/persons
 
 ###
-GET http://localhost:3002/api/persons/5
+GET https://fullstack-open-part3-restless-dust-811.fly.dev/api/persons/5
 
 ###
-DELETE http://localhost:3002/api/persons/2
+DELETE https://fullstack-open-part3-restless-dust-811.fly.dev/api/persons/2
 
 ###
-POST http://localhost:3002/api/persons
+POST https://fullstack-open-part3-restless-dust-811.fly.dev/api/persons
 Content-Type: application/json
 
 {

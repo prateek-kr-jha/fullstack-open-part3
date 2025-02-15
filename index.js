@@ -1,6 +1,7 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
+const app = express();
 
 let persons = [
     {
@@ -26,20 +27,15 @@ let persons = [
 ]
 
 
-// morgan('combined',function(req, res) {
-//     return JSON.stringify(req) + JSON.stringify(res);
-
-
-// })
-
 morgan.token('body', req => {
     return req.body ? JSON.stringify(req.body) : '-';
 })
 
 app.use(express.json());
+app.use(express.static('dist'));
+app.use(cors());
+app.use(morgan(':method :url Status: :status :req[header] :response-time[decimal] ms :body'));
 
-app.use(morgan(':method :url :status :req[header] :response-time[decimal] ms :body'));
-// app.use(morgan(':method :url :status :req[header] :req-body :response-time[digits] :total-time[digits]  '));
 
 app.get('/api/persons', (req, resp) => {
     resp.status(200).send(persons);
