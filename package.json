@@ -9,7 +9,7 @@
     "start": "node index.js",
     "build:ui": "rm -rf dist && cd ../fullstackOpen/part2/phonebook/ && npm run build && cp -r dist ../../../fullstack-open-part3/",
     "deploy": "fly deploy",
-    "deploy:full": "npm run build:ui && npm run deploy", 
+    "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs"
   },
   "author": "Prateek Kumar Jha",
@@ -17,6 +17,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "mongoose": "^8.10.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
