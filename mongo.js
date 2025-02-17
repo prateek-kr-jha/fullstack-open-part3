@@ -1,20 +1,21 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
-if(process.argv.length < 3) {
-    console.log("give password as argument");
-    process.exit(1);
-}
+// if(process.argv.length < 3) {
+//     console.log("give password as argument");
+//     process.exit(1);
+// }
 
 // console.log(process.argv);
 const generateId = () => {
     return parseInt(Math.random() * 100000)
 }
 
-const password = encodeURIComponent(process.argv[2]);
-
-const url =
-  `mongodb+srv://fullstack:${password}@cluster0.2psjv.mongodb.net/phonebook?retryWrites=true&w=majority&appName=Cluster0`;
-
+// const password = encodeURIComponent(process.argv[2]);
+// console.log(process.env.MONGODB_URI);
+const url = process.env.MONGODB_URI;
+//   `mongodb+srv://fullstack:${password}@cluster0.2psjv.mongodb.net/phonebook?retryWrites=true&w=majority&appName=Cluster0`;// Pikachu18%40
+// console.log(url);
 mongoose.set('strictQuery', url);
 
 mongoose.connect(url);

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -71,9 +72,6 @@ app.delete('/api/persons/:id', (req, res) => {
     return res.status(204).end();
 })
 
-const generateId = () => {
-    return parseInt(Math.random() * 100000)
-}
 
 app.post('/api/persons/', (req, res) => {
     const body = req.body;
