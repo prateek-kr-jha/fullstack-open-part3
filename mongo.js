@@ -29,24 +29,24 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model("Person", personSchema);
 
-if(process.argv.length == 5) {
-    const person = new Person({
-        id: generateId(),
-        name: process.argv[3],
-        number: process.argv[4]
-    })
+// if(process.argv.length == 5) {
+//     const person = new Person({
+//         id: generateId(),
+//         name: process.argv[3],
+//         number: process.argv[4]
+//     })
 
-    person.save().then(data => {
-        console.log(data);
-        mongoose.connection.close();
-    })
-}
+//     person.save().then(data => {
+//         console.log(data);
+//         mongoose.connection.close();
+//     })
+// }
 
-if(process.argv.length == 3) {
+// if(process.argv.length == 3) {
     Person.find({}).then(result => {
         result.forEach(person => {
             console.log(person);
         })
         mongoose.connection.close();
     })
-}
+// }
