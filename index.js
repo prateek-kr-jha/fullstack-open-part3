@@ -87,13 +87,11 @@ app.post('/api/persons/', (req, res) => {
         })
     }
 
-    const personCheck = persons.find(person => person.name === body.name);
-
-    if (personCheck) {
+    const existingPerson = Person.findOne({name: body.name})
+    if(existingPerson) {
         return res.status(406).json({
             error: "name should be unique"
         })
-
     }
 
     const newPerson = {
@@ -101,7 +99,7 @@ app.post('/api/persons/', (req, res) => {
         number: body.number,
         id: generateId()
     }
-    persons = persons.concat(newPerson);
+    // persons = persons.concat(newPerson);
 
     return res.status(200).json(newPerson);
 })
