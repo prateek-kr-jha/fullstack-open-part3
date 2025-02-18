@@ -3,29 +3,31 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
+const Person = require('./models/phonebook');
+console.log(Person, "---------");
 
-let persons = [
-    {
-        "id": "1",
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": "2",
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": "3",
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": "4",
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-]
+// let persons = [
+//     {
+//         "id": "1",
+//         "name": "Arto Hellas",
+//         "number": "040-123456"
+//     },
+//     {
+//         "id": "2",
+//         "name": "Ada Lovelace",
+//         "number": "39-44-5323523"
+//     },
+//     {
+//         "id": "3",
+//         "name": "Dan Abramov",
+//         "number": "12-43-234345"
+//     },
+//     {
+//         "id": "4",
+//         "name": "Mary Poppendieck",
+//         "number": "39-23-6423122"
+//     }
+// ]
 
 
 morgan.token('body', req => {
@@ -39,7 +41,10 @@ app.use(morgan(':method :url Status: :status :req[header] :response-time[decimal
 
 
 app.get('/api/persons', (req, resp) => {
-    resp.status(200).send(persons);
+    Person.find({}).then(persons => {
+        console.log(persons);
+        resp.status(200).send(persons);
+    })
 })
 
 app.get('/info', (req, res) => {
