@@ -87,21 +87,32 @@ app.post('/api/persons/', (req, res) => {
         })
     }
 
-    const existingPerson = Person.findOne({name: body.name})
-    if(existingPerson) {
-        return res.status(406).json({
-            error: "name should be unique"
+    Person.findOne({name: body.name}).then(person => {
+        if(person) {
+            return res.status(406).json({
+                error: "name should be unique"
+            })
+        }
+
+        console.log("here is me");
+        const newPerson = new Person({
+            name: body.name,
+            number: body.number
         })
-    }
+        // persons = persons.concat(newPerson);
+    
+        newPerson.save().then(newPersonEntry => {
+            return res.status(200).json(newPersonEntry);
+        }).catch(e => {
+            console.log(e, "error");
+            return res.status(500).json({
+                error: "error in saving"
+            })
+        })
+    })
 
-    const newPerson = {
-        name: body.name,
-        number: body.number,
-        id: generateId()
-    }
-    // persons = persons.concat(newPerson);
 
-    return res.status(200).json(newPerson);
+
 })
 
 
