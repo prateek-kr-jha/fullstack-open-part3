@@ -15,7 +15,13 @@ app.use(express.static('dist'));
 app.use(cors());
 app.use(morgan(':method :url Status: :status :req[header] :response-time[decimal] ms :body'));
 
-
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message, "error");
+    if(error.name === 'CastError') {
+        return res.status(400).send({error: 'malformed id'});
+    }
+    next(error);
+}
 app.get('/api/persons', (req, resp) => {
     Person.find({}).then(persons => {
         console.log(persons);
@@ -23,32 +29,37 @@ app.get('/api/persons', (req, resp) => {
     })
 })
 
-app.get('/info', (req, res) => {
-    const dateString = new Date(Date.now());
-    const infoHtmlString = `<p><em>Phonebook has info for ${persons.length} people</em></p>
-    <p><em>${dateString}</em></p>`;
+// app.get('/info', (req, res) => {
+//     const dateString = new Date(Date.now());
+//     const infoHtmlString = `<p><em>Phonebook has info for ${persons.length} people</em></p>
+//     <p><em>${dateString}</em></p>`;
 
-    res.status(200).send(infoHtmlString);
-})
+//     res.status(200).send(infoHtmlString);
+// })
 
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     const id = req.params.id;
     console.log(id, "------");
-    const person = persons.find(person => person.id === id);
 
-    if (person) {
-        return res.status(200).send(person);
-    } else {
+    Person.findById(id).then(person => {
+        if(person) {
+            return res.status(200).send(person);
+        }
         res.statusMessage = "person with this id doesn't exist";
         return res.status(404).end();
-    }
+    }).catch(e => {
+        // console.log(e, "error");
+        // return res.status(400).send({error: "malformed id"});
+        next(e);
+    })
+
 })
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id;
     console.log(id, "------");
-    persons = persons.filter(person => person.id === id);
+    // persons = persons.filter(person => person.id === id);
 
     return res.status(204).end();
 })
@@ -90,8 +101,8 @@ app.post('/api/persons/', (req, res) => {
 
 
 })
-
-
+// TODO: put and delete
+app.use(errorHandler);
 const PORT = 3002;
 
 app.listen(PORT, () => {
