@@ -29,13 +29,18 @@ app.get('/api/persons', (req, resp) => {
     })
 })
 
-// app.get('/info', (req, res) => {
-//     const dateString = new Date(Date.now());
-//     const infoHtmlString = `<p><em>Phonebook has info for ${persons.length} people</em></p>
-//     <p><em>${dateString}</em></p>`;
+app.get('/info', (req, res, next) => {
+    Person.find({}).then(persons => {
+        const dateString = new Date(Date.now());
+        const infoHtmlString = `<p><em>Phonebook has info for ${persons.length} people</em></p>
+        <p><em>${dateString}</em></p>`;
+    
+        res.status(200).send(infoHtmlString);
 
-//     res.status(200).send(infoHtmlString);
-// })
+    }).catch(e => {
+        next(e);
+    })
+})
 
 
 app.get('/api/persons/:id', (req, res, next) => {
