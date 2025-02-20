@@ -56,14 +56,16 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     const id = req.params.id;
     console.log(id, "------");
-    // persons = persons.filter(person => person.id === id);
+    Person.findByIdAndDelete(id).then(person => {
+        return res.status(204).end();
+    }).catch(e => {
+        next(e);
+    })
 
-    return res.status(204).end();
 })
-
 
 app.post('/api/persons/', (req, res) => {
     const body = req.body;
@@ -101,6 +103,24 @@ app.post('/api/persons/', (req, res) => {
 
 
 })
+
+app.put('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id;
+    const body = req.body;
+    const note = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(id, note, {new: true})
+    .then(updatedNote => {
+        res.status(200).send(updatedNote);
+    })
+    .catch(e => {
+        next(e);
+    })
+})
+
 // TODO: put and delete
 app.use(errorHandler);
 const PORT = 3002;
