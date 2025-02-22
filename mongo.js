@@ -7,10 +7,6 @@ const mongoose = require('mongoose');
 // }
 
 // console.log(process.argv);
-const generateId = () => {
-    return parseInt(Math.random() * 100000)
-}
-
 // const password = encodeURIComponent(process.argv[2]);
 // console.log(process.env.MONGODB_URI);
 const url = process.env.MONGODB_URI;
@@ -27,7 +23,7 @@ const personSchema = new mongoose.Schema({
 
 })
 
-const Person = mongoose.model("Person", personSchema);
+const Person = mongoose.model('Person', personSchema);
 
 // if(process.argv.length == 5) {
 //     const person = new Person({
@@ -43,10 +39,10 @@ const Person = mongoose.model("Person", personSchema);
 // }
 
 // if(process.argv.length == 3) {
-    Person.find({}).then(result => {
-        result.forEach(person => {
-            console.log(person);
-        })
-        mongoose.connection.close();
+Person.find({}).then(result => {
+    result.forEach(person => {
+        console.log(person);
     })
+    mongoose.connection.close();
+})
 // }

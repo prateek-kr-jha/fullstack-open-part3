@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
 const Person = require('./models/phonebook');
-console.log(Person, "---------");
+console.log(Person, '---------');
 
 morgan.token('body', req => {
     return req.body ? JSON.stringify(req.body) : '-';
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(morgan(':method :url Status: :status :req[header] :response-time[decimal] ms :body'));
 
 const errorHandler = (error, req, res, next) => {
-    console.log(error.message, "error");
+    console.log(error.message, 'error');
     if(error.name === 'CastError') {
         return res.status(400).send({error: 'malformed id'});
     }
@@ -45,13 +45,13 @@ app.get('/info', (req, res, next) => {
 
 app.get('/api/persons/:id', (req, res, next) => {
     const id = req.params.id;
-    console.log(id, "------");
+    console.log(id, '------');
 
     Person.findById(id).then(person => {
         if(person) {
             return res.status(200).send(person);
         }
-        res.statusMessage = "person with this id doesn't exist";
+        res.statusMessage = 'person with this id doesn\'t exist';
         return res.status(404).end();
     }).catch(e => {
         // console.log(e, "error");
@@ -63,7 +63,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
     const id = req.params.id;
-    console.log(id, "------");
+    console.log(id, '------');
     Person.findByIdAndDelete(id).then(person => {
         return res.status(204).end();
     }).catch(e => {
@@ -77,18 +77,18 @@ app.post('/api/persons/', (req, res) => {
 
     if (!body || !body.name || !body.number) {
         return res.status(400).json({
-            error: "name or number missing"
+            error: 'name or number missing'
         })
     }
 
     Person.findOne({name: body.name}).then(person => {
         if(person) {
             return res.status(406).json({
-                error: "name should be unique"
+                error: 'name should be unique'
             })
         }
 
-        console.log("here is me");
+        console.log('here is me');
         const newPerson = new Person({
             name: body.name,
             number: body.number
@@ -98,9 +98,9 @@ app.post('/api/persons/', (req, res) => {
         newPerson.save().then(newPersonEntry => {
             return res.status(200).json(newPersonEntry);
         }).catch(e => {
-            console.log(e, "error");
+            console.log(e, 'error');
             return res.status(500).json({
-                error: "error in saving"
+                error: 'error in saving'
             })
         })
     })
@@ -118,12 +118,12 @@ app.put('/api/persons/:id', (req, res, next) => {
     }
 
     Person.findByIdAndUpdate(id, note, {new: true})
-    .then(updatedNote => {
-        res.status(200).send(updatedNote);
-    })
-    .catch(e => {
-        next(e);
-    })
+        .then(updatedNote => {
+            res.status(200).send(updatedNote);
+        })
+        .catch(e => {
+            next(e);
+        })
 })
 
 // TODO: put and delete
