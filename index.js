@@ -18,7 +18,7 @@ app.use(morgan(':method :url Status: :status :req[header] :response-time[decimal
 const errorHandler = (error, req, res, next) => {
     console.log(error.message, 'error');
     if(error.name === 'CastError') {
-        return res.status(400).send({error: 'malformed id'});
+        return res.status(400).send({ error: 'malformed id'  });
     }
     next(error);
 }
@@ -34,7 +34,6 @@ app.get('/info', (req, res, next) => {
         const dateString = new Date(Date.now());
         const infoHtmlString = `<p><em>Phonebook has info for ${persons.length} people</em></p>
         <p><em>${dateString}</em></p>`;
-    
         res.status(200).send(infoHtmlString);
 
     }).catch(e => {
@@ -81,7 +80,7 @@ app.post('/api/persons/', (req, res) => {
         })
     }
 
-    Person.findOne({name: body.name}).then(person => {
+    Person.findOne({ name: body.name }).then(person => {
         if(person) {
             return res.status(406).json({
                 error: 'name should be unique'
@@ -94,7 +93,7 @@ app.post('/api/persons/', (req, res) => {
             number: body.number
         })
         // persons = persons.concat(newPerson);
-    
+
         newPerson.save().then(newPersonEntry => {
             return res.status(200).json(newPersonEntry);
         }).catch(e => {
@@ -117,7 +116,7 @@ app.put('/api/persons/:id', (req, res, next) => {
         number: body.number
     }
 
-    Person.findByIdAndUpdate(id, note, {new: true})
+    Person.findByIdAndUpdate(id, note, { new: true })
         .then(updatedNote => {
             res.status(200).send(updatedNote);
         })
